@@ -24,9 +24,8 @@ public readonly ref struct MapFeatureData
     public GeometryType Type { get; init; }
     public ReadOnlySpan<char> Label { get; init; }
     public ReadOnlySpan<Coordinate> Coordinates { get; init; }
-    public Dictionary<string, string> Properties { get; init; }
+    public Dictionary<PropertyKeys, string> Properties { get; init; }
 }
-
 /// <summary>
 ///     Represents a file with map data organized in the following format:<br />
 ///     <see cref="FileHeader" /><br />
@@ -181,11 +180,17 @@ public unsafe class DataFile : IDisposable
 
                 if (isFeatureInBBox)
                 {
-                    var properties = new Dictionary<string, string>(feature->PropertyCount);
+                    // string -> PropertyKeys
+                    var properties = new Dictionary<PropertyKeys, string>(feature->PropertyCount);
                     for (var p = 0; p < feature->PropertyCount; ++p)
                     {
                         GetProperty(header.Tile.Value.StringsOffsetInBytes, header.Tile.Value.CharactersOffsetInBytes, p * 2 + feature->PropertiesOffset, out var key, out var value);
-                        properties.Add(key.ToString(), value.ToString());
+                        // Removes unused OSM keys
+                        if (!Enum.TryParse<PropertyKeys>(key.ToString(), true, out var keyToAdd))
+                        {
+                            continue;
+                        }
+                        properties.Add(keyToAdd, value.ToString());
                     }
 
                     if (!action(new MapFeatureData

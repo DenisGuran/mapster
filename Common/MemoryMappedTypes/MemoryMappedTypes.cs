@@ -117,10 +117,17 @@ public struct PropertyEntryList
 public struct MapFeature
 {
     // https://wiki.openstreetmap.org/wiki/Key:highway
-    public static string[] HighwayTypes =
+    public enum HighwayTypes
     {
-        "motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "road"
-    };
+        Motorway,
+        Trunk,
+        Primary,
+        Secondary,
+        Tertiary,
+        Unclassified,
+        Residential,
+        Road
+    }
 
     [FieldOffset(0)] public long Id;
     [FieldOffset(8)] public int LabelOffset;
@@ -129,4 +136,61 @@ public struct MapFeature
     [FieldOffset(17)] public int CoordinateCount;
     [FieldOffset(21)] public int PropertiesOffset;
     [FieldOffset(25)] public int PropertyCount;
+}
+
+public enum PropertyKeys
+{
+    Amenity,
+    Boundary,
+    Admin_Level,
+    Building,
+    Highway,
+    Landuse,
+    Leisure,
+    Military,
+    Natural,
+    Place,
+    Railway,
+    Sport,
+    Water,
+    Waterway,
+    Name
+}
+
+public enum BoundaryValues
+{
+    Forest,
+    Administrative
+}
+
+public enum LanduseValues
+{
+    Forest,
+    Orchard,
+    Residential,
+    Cemetery,
+    Industrial,
+    Commercial,
+    Square,
+    Construction,
+    Military,
+    Quarry,
+    Brownfield,
+    Farm,
+    Meadow,
+    Grass,
+    Greenfield,
+    Recreation_Ground,
+    Winter_Sports,
+    Allotments,
+    Reservoir,
+    Basin
+}
+
+public enum PopulatedPlaceValues
+{
+    City,
+    Town,
+    Locality,
+    Hamlet
 }
